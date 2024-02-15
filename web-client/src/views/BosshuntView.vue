@@ -3,15 +3,19 @@ import { useRoute } from 'vue-router';
 import ParticipantHolder from '../components/ParticipantHolder.vue'
 
 import axios from 'axios'
-import { computed, onMounted } from 'vue';
+import { computed, onMounted, ref } from 'vue';
+import type Bosshunt from '@/types/Bosshunt';
+import { tibianTime } from '@/utils';
 
 const route = useRoute();
 const bosshunt_id = computed(() => route.params.id);
 
+const bosshunt = ref<Bosshunt>();
+
 onMounted(async () => {
   try {
     const response = await axios.get('http://localhost:1323/bosshunt/' + bosshunt_id.value)
-    console.log(response.data)
+    bosshunt.value = response.data
   } catch (error) {
     console.error(error)
   }
@@ -21,12 +25,12 @@ onMounted(async () => {
   <section class="section">
     <div class="container">
       <div class="columns">
-        <div class="column">
-          <p>Ferumbras 12:00 12-12-12</p>
+        <div class="column" v-if="bosshunt && bosshunt.participants">
+          <p>{{ bosshunt.boss }} {{ tibianTime(bosshunt.when) }}</p>
           <p>List of participants</p>
-          <ParticipantHolder/>
-          <ParticipantHolder vocation="ek"/>
-          <!-- TODO: participant component -->
+          <p v-for="(participant, index) in bosshunt.participants" :key="index">
+            <ParticipantHolder :vocation="participant.vocation"/>
+          </p>
           test
         </div>
       </div>

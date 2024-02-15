@@ -18,7 +18,7 @@ func main() {
 		log.Fatalf("failed to connect to database: %v", err)
 	}
 
-	db.AutoMigrate(&models.World{}, &models.Boss{}, &models.Bosshunt{}, &models.Participant{})
+	db.AutoMigrate(&models.World{}, &models.Boss{}, &models.Bosshunt{}, &models.Participant{}, &models.User{})
 
 	e := echo.New()
 
@@ -48,7 +48,7 @@ func main() {
 
 	e.GET("/bosshunt/:id", func(c echo.Context) error {
 		var bosshunt models.Bosshunt
-		db.Where("id = ?", c.Param("id")).First(&bosshunt)
+		db.Model(&models.Bosshunt{}).Preload("Participants").Where("id = ?", c.Param("id")).First(&bosshunt)
 		return c.JSON(http.StatusOK, bosshunt)
 	})
 

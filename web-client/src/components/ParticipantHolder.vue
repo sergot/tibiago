@@ -28,7 +28,6 @@ const cancelParticipation = () => {
     showModal.value = false
     if (startedParticipating.value) {
         startedParticipating.value = false
-        // TODO: send request to server
     }
 }
 

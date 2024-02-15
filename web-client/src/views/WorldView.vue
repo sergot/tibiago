@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
-import axios from 'axios';
+import { computed, onMounted, ref } from 'vue'
+import axios from 'axios'
 
-import type Bosshunt from '@/types/Bosshunt';
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router'
+
+import type Bosshunt from '@/types/Bosshunt'
+import { tibianTime } from '@/utils'
 
 const bosshunts = ref<Bosshunt[]>([]);
 
@@ -27,9 +29,8 @@ onMounted(async () => {
         <div class="column">
           <p>List of boss hunts</p>
           <div v-for="bosshunt in bosshunts" :key="bosshunt.id">
-            <RouterLink :to="`/bosshunt/${bosshunt.id}`">{{ bosshunt.boss }} [{{ bosshunt.datetime }}] <i class="fa-brands fa-discord"></i> <i v-if="!bosshunt.discord_only" class="fa-solid fa-globe"></i></RouterLink>
+            <RouterLink :to="`/bosshunt/${bosshunt.id}`">{{ bosshunt.boss }} [{{ tibianTime(bosshunt.when) }}] <i class="fa-brands fa-discord"></i> <i v-if="!bosshunt.discord_only" class="fa-solid fa-globe"></i></RouterLink>
           </div>
-          <!-- <RouterLink to="/listview">Ferumbras [12:12 12-12-12] 24 hours left (ss+10) <i class="fa-brands fa-discord"></i> <i class="fa-solid fa-globe"></i></RouterLink> -->
           <p>and so on...</p>
         </div>
         <div class="column">
